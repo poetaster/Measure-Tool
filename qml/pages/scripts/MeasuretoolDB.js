@@ -1,7 +1,8 @@
 .pragma library
 .import QtQuick.LocalStorage 2.0 as Sql
 
-var db;
+//var db = LS.LocalStorage.openDatabaseSync("tooterb", "", "harbour-tooterb", 100000);
+var db = Sql.LocalStorage.openDatabaseSync("MeasuretoolDB","1.0","Measuretool Database",1e5);
 
 function openDB() {
     db = Sql.LocalStorage.openDatabaseSync("MeasuretoolDB","1.0","Measuretool Database",1e5);
@@ -39,7 +40,7 @@ function updateHeight(value) {
 function getHeight() {
     var value = 0;
     try {
-        db.readTransaction( function(tx) {
+        db.transaction( function(tx) {
            var rs = tx.executeSql("SELECT phoneheight FROM Preferences");
             value = rs.rows.item(0).phoneheight;
         });

@@ -121,11 +121,35 @@ Page {
         width: page.width * 0.9
         height: page.height * 0.7
         anchors.centerIn: parent
-        GStreamerVideoOutput {
+        QtObject
+        {
+            id: cameraState
+            signal slidesShow(bool slideshowRunning)
+        }
+
+        Connections
+        {
+            target: cameraState
+            onSlidesShow:
+            {
+                if (debug) console.log("cameraState:", slideshowRunning)
+                videoOutput.visible = !slideshowRunning
+            }
+        }
+        VideoOutput
+        {
+            source: camera
+            id:videoOutput
+            anchors.fill: parent
+            //z : -1
+            focus : visible // to receive focus and capture key events when visible
+            visible: true
+        }
+        /*GStreamerVideoOutput {
             anchors.fill: parent
             source: camera
             focus: visible
-        }
+        }*/
 
         Camera {
             id: camera
